@@ -22,22 +22,18 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(path = "patient")
 public class PatientController {
     @Autowired
-    private final PatientService patientService;
+    private PatientService patientService;
     @Autowired
-    private final AddressService addressService;
-
-    public PatientController(PatientService patientService, AddressService addressService, DentistService dentistService) {
-        this.patientService = patientService;
-        this.addressService = addressService;
-    }
+    private AddressService addressService;
 
     @PostMapping(path = "")
     public ResponseEntity<Patient> save(@RequestBody Patient patient){;
+        //patient.setAddress(new Address("Los Juncos",565,"awdasd","asdasdad"));
         Patient patient1 = patientService.save(patient);
         //metodo que devuelve error 500
-        /*Address address = addressService.getById(patient1.getId());
-        patient1.setAddress(address);
-        patientService.save(patient1);*/
+        //Address address = addressService.getById(patient1.getId());
+        //patient1.setAddress(address);
+        //patientService.save(patient1);
         List<Address> addresses = addressService.getAll();
             for (Address address:addresses) {
             if (address.getId() == patient1.getId()) {
@@ -63,7 +59,16 @@ public class PatientController {
 
     @GetMapping(path = "")
     public ResponseEntity<List<Patient>> searchAll(){
-        return ResponseEntity.ok(patientService.getAll());
+        List<Address> addressList = addressService.getAll();
+        List<Patient> patientList = patientService.getAll();
+        for (Patient patient:patientList) {
+            for (Address address:addressList) {
+                if (address.getId() == patient.getId()) {
+                    patient.setAddress(address);
+                }
+            }
+        }
+        return ResponseEntity.ok(patientList);
     }
 
 }

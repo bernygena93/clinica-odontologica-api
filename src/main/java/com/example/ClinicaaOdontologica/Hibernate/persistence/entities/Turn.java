@@ -1,5 +1,7 @@
 package com.example.ClinicaaOdontologica.Hibernate.persistence.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -10,22 +12,44 @@ public class Turn {
     @SequenceGenerator(name = "turn_sequence", sequenceName = "turn_sequence", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private String dniPatient;
+    private Integer enrollmentDentist;
+    @JsonIgnore
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "patient_id")
     private Patient patient;
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "dentist_id")
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "dentist_id", referencedColumnName = "id")
     private Dentist dentist;
     @Column
     private Date fechaTurno;
 
-    public Turn() {
+    public Turn(){
     }
 
-    public Turn(Patient patient, Dentist dentist, Date fechaTurno) {
+    public Turn(String dniPatient, Integer enrollmentDentist, Patient patient, Dentist dentist, Date fechaTurno) {
+        this.dniPatient = dniPatient;
+        this.enrollmentDentist = enrollmentDentist;
         this.patient = patient;
         this.dentist = dentist;
         this.fechaTurno = fechaTurno;
+    }
+
+    public void setDniPatient(String dniPatient) {
+        this.dniPatient = dniPatient;
+    }
+
+    public void setEnrollmentDentist(Integer enrollmentDentist) {
+        this.enrollmentDentist = enrollmentDentist;
+    }
+
+    public String getDniPatient() {
+        return dniPatient;
+    }
+
+    public Integer getEnrollmentDentist() {
+        return enrollmentDentist;
     }
 
     public Long getId() {
