@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping(path = "turn")
@@ -30,8 +31,9 @@ public class TurnController {
         List<Patient> patientList = patientService.getAll();
         List<Dentist> dentistList = dentistService.getAll();
         for (Patient patient:patientList) {
-            if(patient.getDni() == turn.getDniPatient()){
+            if(patient.getDni().equals(turn.getDniPatient())){
                 turn.setPatient(patient);
+                patient.setTurn(turn);
             }
         }
         for (Dentist dentist:dentistList) {

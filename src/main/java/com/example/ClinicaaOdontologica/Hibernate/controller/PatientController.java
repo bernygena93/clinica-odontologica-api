@@ -2,17 +2,13 @@ package com.example.ClinicaaOdontologica.Hibernate.controller;
 
 import com.example.ClinicaaOdontologica.Hibernate.persistence.entities.Address;
 import com.example.ClinicaaOdontologica.Hibernate.persistence.entities.Patient;
+import com.example.ClinicaaOdontologica.Hibernate.persistence.entities.Turn;
 import com.example.ClinicaaOdontologica.Hibernate.service.AddressService;
-import com.example.ClinicaaOdontologica.Hibernate.service.DentistService;
 import com.example.ClinicaaOdontologica.Hibernate.service.PatientService;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import net.bytebuddy.pool.TypePool;
-import org.hibernate.mapping.Map;
+import com.example.ClinicaaOdontologica.Hibernate.service.TurnService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,15 +21,12 @@ public class PatientController {
     private PatientService patientService;
     @Autowired
     private AddressService addressService;
+    @Autowired
+    private TurnService turnService;
 
     @PostMapping(path = "")
-    public ResponseEntity<Patient> save(@RequestBody Patient patient){;
-        //patient.setAddress(new Address("Los Juncos",565,"awdasd","asdasdad"));
+    public ResponseEntity<Patient> save(@RequestBody Patient patient){
         Patient patient1 = patientService.save(patient);
-        //metodo que devuelve error 500
-        //Address address = addressService.getById(patient1.getId());
-        //patient1.setAddress(address);
-        //patientService.save(patient1);
         List<Address> addresses = addressService.getAll();
             for (Address address:addresses) {
             if (address.getId() == patient1.getId()) {
@@ -47,6 +40,12 @@ public class PatientController {
     @GetMapping(path = "/{id}")
     public ResponseEntity<Patient> searchById(@PathVariable Long id) {
         Patient patient= patientService.getById(id);
+        List<Turn> turns = turnService.getAll();
+        for (Turn turn: turns) {
+            if(patient.getDni().equals(turn.getDniPatient())){
+                patient.setTurn(turn);
+            }
+        }
         return ResponseEntity.ok(patient);
     }
 
@@ -61,6 +60,7 @@ public class PatientController {
     public ResponseEntity<List<Patient>> searchAll(){
         List<Address> addressList = addressService.getAll();
         List<Patient> patientList = patientService.getAll();
+        List<Turn> turnList = turnService.getAll();
         for (Patient patient:patientList) {
             for (Address address:addressList) {
                 if (address.getId() == patient.getId()) {

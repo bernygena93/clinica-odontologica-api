@@ -1,8 +1,10 @@
 package com.example.ClinicaaOdontologica.Hibernate.persistence.entities;
 
+import antlr.collections.List;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -19,7 +21,6 @@ public class Dentist {
     private String surname;
     @Column
     private Integer enrollment;
-    @JsonIgnore
     @OneToMany(mappedBy = "dentist", fetch = FetchType.LAZY)
     private Set<Turn> turns = new HashSet<>();
     public Dentist() {

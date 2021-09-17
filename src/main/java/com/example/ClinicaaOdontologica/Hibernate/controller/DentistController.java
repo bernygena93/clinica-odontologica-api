@@ -9,7 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @CrossOrigin(origins = "*", methods= {RequestMethod.GET,RequestMethod.POST})
@@ -29,6 +31,16 @@ public class DentistController {
     @GetMapping(path = "/{id}")
     public ResponseEntity<Dentist> searchById(@PathVariable Long id) {
         Dentist dentist = dentistService.getById(id);
+        List<Turn> turns = turnService.getAll();
+        List<Turn> turnList = new ArrayList<>();
+            for (Turn turn: turns) {
+                if(dentist.getEnrollment() == turn.getEnrollmentDentist()){
+                    turnList.add(turn);
+                }
+            }
+            Set<Turn> turnSet = new HashSet<Turn>(turnList);
+            dentist.setTurns(turnSet);
+            dentistService.save(dentist);
         return ResponseEntity.ok(dentist);
     }
 
