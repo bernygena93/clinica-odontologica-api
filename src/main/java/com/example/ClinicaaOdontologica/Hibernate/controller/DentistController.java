@@ -40,7 +40,6 @@ public class DentistController {
             }
             Set<Turn> turnSet = new HashSet<Turn>(turnList);
             dentist.setTurns(turnSet);
-            dentistService.save(dentist);
         return ResponseEntity.ok(dentist);
     }
 
