@@ -3,10 +3,14 @@ package com.example.ClinicaaOdontologica.Hibernate.service.implement;
 import com.example.ClinicaaOdontologica.Hibernate.persistence.entities.Turn;
 import com.example.ClinicaaOdontologica.Hibernate.persistence.repository.TurnRepository;
 import com.example.ClinicaaOdontologica.Hibernate.service.TurnService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class TurnServiceImpl implements TurnService {
@@ -18,19 +22,33 @@ public class TurnServiceImpl implements TurnService {
         this.turnRepository = turnRepository;
     }
 
+    @Autowired
+    ObjectMapper mapper;
+
     @Override
-    public Turn save(Turn turn) {
-        return turnRepository.save(turn);
+    public void save(Turn turn) {
+        turnRepository.save(turn);
     }
 
     @Override
-    public List<Turn> getAll() {
-        return turnRepository.findAll();
+    public Collection<Turn> getAll() {
+        List<Turn> turns = turnRepository.findAll();
+        return turns;
     }
 
     @Override
-    public Turn getById(Long id) {
-        return turnRepository.getById(id);
+    public Turn findById(Long id) {
+        return turnRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public Turn getByDni(String dni) {
+        return turnRepository.getByDni(dni);
+    }
+
+    @Override
+    public Turn getByEnrollment(Integer enrollment) {
+        return turnRepository.getByEnrollment(enrollment);
     }
 
     @Override
@@ -39,7 +57,7 @@ public class TurnServiceImpl implements TurnService {
     }
 
     @Override
-    public Turn update(Turn turn) {
-        return null;
+    public void update(Turn turn) {
+        turnRepository.save(turn);
     }
 }

@@ -5,13 +5,11 @@ import com.example.ClinicaaOdontologica.Hibernate.persistence.entities.Turn;
 import com.example.ClinicaaOdontologica.Hibernate.service.DentistService;
 import com.example.ClinicaaOdontologica.Hibernate.service.TurnService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @RestController
 @CrossOrigin(origins = "*", methods= {RequestMethod.GET,RequestMethod.POST})
@@ -23,23 +21,14 @@ public class DentistController {
     public TurnService turnService;
 
     @PostMapping(path = "")
-    public ResponseEntity<Dentist> save(@RequestBody Dentist dentist) {
-        return ResponseEntity.ok(dentistService.save(dentist));
-
+    public ResponseEntity<?> save(@RequestBody Dentist dentist) {
+        dentistService.save(dentist);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @GetMapping(path = "/{id}")
     public ResponseEntity<Dentist> searchById(@PathVariable Long id) {
-        Dentist dentist = dentistService.getById(id);
-        List<Turn> turns = turnService.getAll();
-        List<Turn> turnList = new ArrayList<>();
-            for (Turn turn: turns) {
-                if(dentist.getEnrollment() == turn.getEnrollmentDentist()){
-                    turnList.add(turn);
-                }
-            }
-            Set<Turn> turnSet = new HashSet<Turn>(turnList);
-            dentist.setTurns(turnSet);
+        Dentist dentist = dentistService.findById(id);
         return ResponseEntity.ok(dentist);
     }
 
@@ -51,8 +40,13 @@ public class DentistController {
     }
 
     @GetMapping(path = "")
-    public ResponseEntity<List<Dentist>> searchAll(){
-        return ResponseEntity.ok(dentistService.getAll());
+    public Collection<Dentist> searchAll(){
+        return dentistService.getAll();
     }
 
+    @PutMapping(path = "")
+    public ResponseEntity<?> update(@RequestBody Dentist dentist) {
+        dentistService.update(dentist);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
 }

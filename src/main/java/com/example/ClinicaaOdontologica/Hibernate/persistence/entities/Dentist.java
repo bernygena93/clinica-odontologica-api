@@ -2,6 +2,8 @@ package com.example.ClinicaaOdontologica.Hibernate.persistence.entities;
 
 import antlr.collections.List;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -9,7 +11,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table
+@Table(name = "Dentists")
+@Getter
+@Setter
 public class Dentist {
     @Id
     @SequenceGenerator(name = "dentist_sequence", sequenceName = "dentist_sequence", allocationSize = 1)
@@ -23,6 +27,7 @@ public class Dentist {
     private Integer enrollment;
     @OneToMany(mappedBy = "dentist", fetch = FetchType.LAZY)
     private Set<Turn> turns = new HashSet<>();
+
     public Dentist() {
     }
 
@@ -41,41 +46,6 @@ public class Dentist {
         this.turns = turns;
     }
 
-    public Set<Turn> getTurns() {
-        return turns;
-    }
-
-    public void setTurns(Set<Turn> turns) {
-        this.turns = turns;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-
-    public Integer getEnrollment() {
-        return enrollment;
-    }
-
-    public void setEnrollment(Integer enrollment) {
-        this.enrollment = enrollment;
-    }
 }
 
 

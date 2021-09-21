@@ -1,20 +1,18 @@
 package com.example.ClinicaaOdontologica.Hibernate.controller;
 
-import com.example.ClinicaaOdontologica.Hibernate.persistence.entities.Address;
-import com.example.ClinicaaOdontologica.Hibernate.persistence.entities.Dentist;
-import com.example.ClinicaaOdontologica.Hibernate.persistence.entities.Patient;
-import com.example.ClinicaaOdontologica.Hibernate.persistence.entities.Turn;
+import com.example.ClinicaaOdontologica.Hibernate.persistence.entities.*;
+import com.example.ClinicaaOdontologica.Hibernate.persistence.repository.PatientRepository;
 import com.example.ClinicaaOdontologica.Hibernate.service.AddressService;
 import com.example.ClinicaaOdontologica.Hibernate.service.DentistService;
 import com.example.ClinicaaOdontologica.Hibernate.service.PatientService;
 import com.example.ClinicaaOdontologica.Hibernate.service.TurnService;
-import org.hibernate.mapping.Map;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 @RestController
 @CrossOrigin(origins = "*", methods= {RequestMethod.GET,RequestMethod.POST})
@@ -26,29 +24,24 @@ public class TurnController {
     private DentistService dentistService;
     @Autowired
     private PatientService patientService;
+    @Autowired
+    private PatientRepository patientRepository;
+    @Autowired
+    private AddressService addressService;
 
     @PostMapping(path = "")
-    public ResponseEntity<Turn> save(@RequestBody Turn turn) {
-        List<Patient> patientList = patientService.getAll();
-        List<Dentist> dentistList = dentistService.getAll();
-        for (Patient patient:patientList) {
-            if(patient.getDni().equals(turn.getDniPatient())){
-                turn.setPatient(patient);
-                patient.setTurn(turn);
-            }
-        }
-        for (Dentist dentist:dentistList) {
-            if(dentist.getEnrollment() == turn.getEnrollmentDentist()){
-                turn.setDentist(dentist);
-            }
-        }
-        return ResponseEntity.ok(turnService.save(turn));
-
+    public ResponseEntity<?> save(@RequestBody Turn turn){
+        Patient patient = patientService.findByDni(turn.getDniPatient());
+        Dentist dentist = dentistService.getByEnrollment(turn.getEnrollmentDentist());
+        turn.setDentist(dentist);
+        turn.setPatient(patient);
+        turnService.save(turn);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @GetMapping(path = "/{id}")
     public ResponseEntity<Turn> searchById(@PathVariable Long id) {
-        Turn turn= turnService.getById(id);
+        Turn turn = turnService.findById(id);
         return ResponseEntity.ok(turn);
     }
 
@@ -60,8 +53,20 @@ public class TurnController {
     }
 
     @GetMapping(path = "")
-    public ResponseEntity<List<Turn>> searchAll(){
-        return ResponseEntity.ok(turnService.getAll());
+    public Collection<Turn> searchAll(){
+        return turnService.getAll();
+    }
+
+    @PutMapping(path = "")
+    public ResponseEntity<?> update(@RequestBody Turn turn) {
+        Collection<Patient> patientList = patientService.getAll();
+        Collection<Dentist> dentistList = dentistService.getAll();
+        for (Patient patient:patientList) {
+            //Turn turn1 = turnService.getByDni(patient.getDni());
+            patient.setTurn(turn);
+        }
+        turnService.update(turn);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
 }

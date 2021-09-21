@@ -3,9 +3,11 @@ package com.example.ClinicaaOdontologica.Hibernate.service.implement;
 import com.example.ClinicaaOdontologica.Hibernate.persistence.entities.Address;
 import com.example.ClinicaaOdontologica.Hibernate.persistence.repository.AddressRepository;
 import com.example.ClinicaaOdontologica.Hibernate.service.AddressService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.List;
+
+import java.util.*;
 
 @Service
 public class AddressServiceImpl implements AddressService {
@@ -15,21 +17,23 @@ public class AddressServiceImpl implements AddressService {
     public AddressServiceImpl(AddressRepository addressRepository) {
         this.addressRepository = addressRepository;
     }
+    @Autowired
+    ObjectMapper mapper;
 
     @Override
-    public Address save(Address address) {
-        Address address1 = addressRepository.save(address);
-        return address1;
+    public void save(Address address) {
+        addressRepository.save(address);
     }
 
     @Override
-    public List<Address> getAll() {
-        return addressRepository.findAll();
+    public Collection<Address> getAll() {
+        Collection<Address> addressList = addressRepository.findAll();
+        return addressList;
     }
 
     @Override
-    public Address getById(Long id) {
-        return addressRepository.getById(id);
+    public Address findById(Long id) {
+        return addressRepository.findById(id).orElse(null);
     }
 
     @Override
@@ -38,7 +42,7 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public Address update(Address address) {
-        return null;
+    public void update(Address address) {
+        addressRepository.save(address);
     }
 }

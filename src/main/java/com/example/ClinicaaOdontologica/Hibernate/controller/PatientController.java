@@ -1,15 +1,15 @@
 package com.example.ClinicaaOdontologica.Hibernate.controller;
 
-import com.example.ClinicaaOdontologica.Hibernate.persistence.entities.Address;
-import com.example.ClinicaaOdontologica.Hibernate.persistence.entities.Patient;
-import com.example.ClinicaaOdontologica.Hibernate.persistence.entities.Turn;
+import com.example.ClinicaaOdontologica.Hibernate.persistence.entities.*;
 import com.example.ClinicaaOdontologica.Hibernate.service.AddressService;
 import com.example.ClinicaaOdontologica.Hibernate.service.PatientService;
 
+import java.util.Collection;
 import java.util.List;
 
 import com.example.ClinicaaOdontologica.Hibernate.service.TurnService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,28 +25,31 @@ public class PatientController {
     private TurnService turnService;
 
     @PostMapping(path = "")
-    public ResponseEntity<Patient> save(@RequestBody Patient patient){
-        Patient patient1 = patientService.save(patient);
-        List<Address> addresses = addressService.getAll();
-            for (Address address:addresses) {
-            if (address.getId() == patient1.getId()) {
-                patient1.setAddress(address);
-            }
-        }
-        patientService.save(patient1);
-        return ResponseEntity.ok(patient1);
+    public ResponseEntity<?> save(@RequestBody Patient patient){
+        patientService.save(patient);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @GetMapping(path = "/{id}")
     public ResponseEntity<Patient> searchById(@PathVariable Long id) {
-        Patient patient= patientService.getById(id);
-        List<Turn> turns = turnService.getAll();
-        for (Turn turn: turns) {
-            if(patient.getDni().equals(turn.getDniPatient())){
-                patient.setTurn(turn);
+        Address address = addressService.findById(id);
+        Patient patient = patientService.findById(id);
+        patient.setAddress(address);
+        return ResponseEntity.ok(patient);
+    }
+
+    @GetMapping(path = "")
+    public Collection<Patient> searchAll(){
+        Collection<Address> addresses = addressService.getAll();
+        Collection<Patient> patients = patientService.getAll();
+        for (Patient patient: patients) {
+            for (Address address: addresses) {
+                if(address.getId() == patient.getId()){
+                    patient.setAddress(address);
+                }
             }
         }
-        return ResponseEntity.ok(patient);
+        return patientService.getAll();
     }
 
     @DeleteMapping(path = "/{id}")
@@ -56,19 +59,9 @@ public class PatientController {
         return response;
     }
 
-    @GetMapping(path = "")
-    public ResponseEntity<List<Patient>> searchAll(){
-        List<Address> addressList = addressService.getAll();
-        List<Patient> patientList = patientService.getAll();
-        List<Turn> turnList = turnService.getAll();
-        for (Patient patient:patientList) {
-            for (Address address:addressList) {
-                if (address.getId() == patient.getId()) {
-                    patient.setAddress(address);
-                }
-            }
-        }
-        return ResponseEntity.ok(patientList);
+    @PutMapping(path = "")
+    public ResponseEntity<?> update(@RequestBody Patient patient){
+        patientService.update(patient);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
-
 }
