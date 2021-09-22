@@ -2,32 +2,31 @@ package com.example.ClinicaaOdontologica.Hibernate.controller;
 
 import com.example.ClinicaaOdontologica.Hibernate.persistence.entities.*;
 import com.example.ClinicaaOdontologica.Hibernate.persistence.repository.PatientRepository;
-import com.example.ClinicaaOdontologica.Hibernate.service.AddressService;
-import com.example.ClinicaaOdontologica.Hibernate.service.DentistService;
-import com.example.ClinicaaOdontologica.Hibernate.service.PatientService;
-import com.example.ClinicaaOdontologica.Hibernate.service.TurnService;
+import com.example.ClinicaaOdontologica.Hibernate.service.IAddressService;
+import com.example.ClinicaaOdontologica.Hibernate.service.IDentistService;
+import com.example.ClinicaaOdontologica.Hibernate.service.IPatientService;
+import com.example.ClinicaaOdontologica.Hibernate.service.ITurnService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
-import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "*", methods= {RequestMethod.GET,RequestMethod.POST})
 @RequestMapping(path = "turn")
 public class TurnController {
     @Autowired
-    private TurnService turnService;
+    private ITurnService turnService;
     @Autowired
-    private DentistService dentistService;
+    private IDentistService dentistService;
     @Autowired
-    private PatientService patientService;
+    private IPatientService patientService;
     @Autowired
     private PatientRepository patientRepository;
     @Autowired
-    private AddressService addressService;
+    private IAddressService addressService;
 
     @PostMapping(path = "")
     public ResponseEntity<?> save(@RequestBody Turn turn){

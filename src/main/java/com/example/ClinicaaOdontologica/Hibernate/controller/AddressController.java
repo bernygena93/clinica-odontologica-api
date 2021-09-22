@@ -1,7 +1,7 @@
 package com.example.ClinicaaOdontologica.Hibernate.controller;
 
 import com.example.ClinicaaOdontologica.Hibernate.persistence.entities.Address;
-import com.example.ClinicaaOdontologica.Hibernate.service.AddressService;
+import com.example.ClinicaaOdontologica.Hibernate.service.IAddressService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,9 +14,9 @@ import java.util.Collection;
 @RequestMapping(path = "address")
 public class AddressController {
 
-    private final AddressService addressService;
+    private final IAddressService addressService;
     @Autowired
-    public AddressController(AddressService addressService) {
+    public AddressController(IAddressService addressService) {
         this.addressService = addressService;
     }
 

@@ -1,9 +1,8 @@
 package com.example.ClinicaaOdontologica.Hibernate.controller;
 
 import com.example.ClinicaaOdontologica.Hibernate.persistence.entities.Dentist;
-import com.example.ClinicaaOdontologica.Hibernate.persistence.entities.Turn;
-import com.example.ClinicaaOdontologica.Hibernate.service.DentistService;
-import com.example.ClinicaaOdontologica.Hibernate.service.TurnService;
+import com.example.ClinicaaOdontologica.Hibernate.service.IDentistService;
+import com.example.ClinicaaOdontologica.Hibernate.service.ITurnService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,9 +15,9 @@ import java.util.*;
 @RequestMapping(path = "dentist")
 public class DentistController {
     @Autowired
-    private DentistService dentistService;
+    private IDentistService dentistService;
     @Autowired
-    public TurnService turnService;
+    public ITurnService turnService;
 
     @PostMapping(path = "")
     public ResponseEntity<?> save(@RequestBody Dentist dentist) {

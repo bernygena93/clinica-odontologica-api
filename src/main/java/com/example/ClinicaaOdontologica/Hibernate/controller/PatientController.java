@@ -1,13 +1,12 @@
 package com.example.ClinicaaOdontologica.Hibernate.controller;
 
 import com.example.ClinicaaOdontologica.Hibernate.persistence.entities.*;
-import com.example.ClinicaaOdontologica.Hibernate.service.AddressService;
-import com.example.ClinicaaOdontologica.Hibernate.service.PatientService;
+import com.example.ClinicaaOdontologica.Hibernate.service.IAddressService;
+import com.example.ClinicaaOdontologica.Hibernate.service.IPatientService;
 
 import java.util.Collection;
-import java.util.List;
 
-import com.example.ClinicaaOdontologica.Hibernate.service.TurnService;
+import com.example.ClinicaaOdontologica.Hibernate.service.ITurnService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,11 +17,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(path = "patient")
 public class PatientController {
     @Autowired
-    private PatientService patientService;
+    private IPatientService patientService;
     @Autowired
-    private AddressService addressService;
+    private IAddressService addressService;
     @Autowired
-    private TurnService turnService;
+    private ITurnService turnService;
 
     @PostMapping(path = "")
     public ResponseEntity<?> save(@RequestBody Patient patient){
