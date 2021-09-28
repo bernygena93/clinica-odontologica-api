@@ -25,23 +25,24 @@ public class JwtProvider {
                 .setSubject(primaryUser.getUsername())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(new Date().getTime() + expiration * 1000))
-                .signWith(SignatureAlgorithm.HS512, secret)
+                .signWith(SignatureAlgorithm.HS512 , secret)
                 .compact();
     }
 
     public String getByUserNameFromToken(String token){
-        return Jwts.parser().setSigningKey(secret).parseClaimsJwt(token).getBody().getSubject();
+        return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody().getSubject();
     }
 
     public boolean validateToken(String token){
         try {
-            Jwts.parser().setSigningKey(secret).parseClaimsJwt(token);
+            Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
             return true;
         }catch (MalformedJwtException malformedJwtException){
             logger.error("Error, malformed token");
+            logger.error(malformedJwtException.getMessage());
         }
         catch (UnsupportedJwtException unsupportedJwtException){
-            logger.error("Error, token not supported");
+            logger.error("Error, token not supported" + unsupportedJwtException.getMessage());
         }
         catch (ExpiredJwtException expiredJwtException){
             logger.error("Error, expired token");

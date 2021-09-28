@@ -24,7 +24,7 @@ public class User {
     @NotNull
     @Column
     private String password;
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "id_role", referencedColumnName = "roleName")
     private Role role;
 

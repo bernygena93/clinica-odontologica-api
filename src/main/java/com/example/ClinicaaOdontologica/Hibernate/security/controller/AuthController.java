@@ -24,8 +24,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@CrossOrigin
-@RequestMapping("/auth")
+@CrossOrigin(origins = "*", methods= {RequestMethod.GET,RequestMethod.POST})
+@RequestMapping(path = "/auth")
 public class AuthController {
 
     @Autowired
@@ -48,15 +48,15 @@ public class AuthController {
         }
         User user = new User(userSignUp.getUserName(), userSignUp.getEmail(), passwordEncoder.encode(userSignUp.getPassword()));
         Role role = new Role();
-        role = iRoleService.findBYRoleName(RoleName.USER).get();
+        role = iRoleService.findBYRoleName(RoleName.ROLE_USER).get();
         if(userSignUp.getRole().equals("ADMIN"))
-            role = iRoleService.findBYRoleName(RoleName.ADMIN).get();
+            role = iRoleService.findBYRoleName(RoleName.ROLE_ADMIN).get();
         user.setRole(role);
         iUserService.save(user);
         return ResponseEntity.ok("Usuario creado con exito");
     }
 
-    @PostMapping("/signin")
+    @PostMapping(path = "/signin")
     public ResponseEntity<JwtDTO> signIn(@RequestBody UserSignInDTO userSignIn){
         Authentication authentication = authenticationManager.authenticate( new UsernamePasswordAuthenticationToken(userSignIn.getUserName(),
                         userSignIn.getPassword()));

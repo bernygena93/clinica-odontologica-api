@@ -5,12 +5,16 @@ import com.example.ClinicaaOdontologica.Hibernate.service.IAddressService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 
 @RestController
-@CrossOrigin(origins = "*", methods= {RequestMethod.GET,RequestMethod.POST})
+@CrossOrigin(origins = "*", methods= {RequestMethod.GET,
+        RequestMethod.POST,
+        RequestMethod.PUT,
+        RequestMethod.DELETE})
 @RequestMapping(path = "address")
 public class AddressController {
 
@@ -20,6 +24,7 @@ public class AddressController {
         this.addressService = addressService;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(path = "")
     public ResponseEntity<?> save(@RequestBody Address address) {
         addressService.save(address);
@@ -32,6 +37,7 @@ public class AddressController {
         return ResponseEntity.ok(address);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         ResponseEntity<String> response = null;
@@ -44,6 +50,7 @@ public class AddressController {
         return addressService.getAll();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping(path = "")
     public ResponseEntity<?> update(@RequestBody Address address) {
         addressService.update(address);

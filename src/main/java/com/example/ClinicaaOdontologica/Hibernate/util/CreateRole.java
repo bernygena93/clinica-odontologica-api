@@ -14,8 +14,8 @@ public class CreateRole implements CommandLineRunner {
     IRoleService iRoleService;
     @Override
     public void run(String... args) throws Exception {
-        Role adminRole = new Role(RoleName.ADMIN);
-        Role userRole = new Role(RoleName.USER);
+        Role adminRole = new Role(RoleName.ROLE_ADMIN);
+        Role userRole = new Role(RoleName.ROLE_USER);
         iRoleService.save(adminRole);
         iRoleService.save(userRole);
     }

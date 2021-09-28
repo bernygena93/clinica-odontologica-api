@@ -10,10 +10,14 @@ import com.example.ClinicaaOdontologica.Hibernate.service.ITurnService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@CrossOrigin(origins = "*", methods= {RequestMethod.GET,RequestMethod.POST})
+@CrossOrigin(origins = "*", methods= {RequestMethod.GET,
+        RequestMethod.POST,
+        RequestMethod.PUT,
+        RequestMethod.DELETE})
 @RequestMapping(path = "patient")
 public class PatientController {
     @Autowired
@@ -23,6 +27,7 @@ public class PatientController {
     @Autowired
     private ITurnService turnService;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(path = "")
     public ResponseEntity<?> save(@RequestBody Patient patient){
         patientService.save(patient);
@@ -51,6 +56,7 @@ public class PatientController {
         return patientService.getAll();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id) {
         ResponseEntity<String> response = null;
@@ -58,6 +64,7 @@ public class PatientController {
         return response;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping(path = "")
     public ResponseEntity<?> update(@RequestBody Patient patient){
         patientService.update(patient);
