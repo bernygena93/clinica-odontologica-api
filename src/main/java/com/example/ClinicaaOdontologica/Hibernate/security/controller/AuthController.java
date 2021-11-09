@@ -24,7 +24,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@CrossOrigin(origins = "*", methods= {RequestMethod.GET,RequestMethod.POST})
+@CrossOrigin(origins = "*")
 @RequestMapping(path = "/auth")
 public class AuthController {
 
@@ -42,9 +42,9 @@ public class AuthController {
     @PostMapping(path = "/signup")
     public ResponseEntity<?> signUp(@RequestBody UserSignUpDTO userSignUp){
         if(iUserService.existsByUserName(userSignUp.getUserName())){
-            return ResponseEntity.ok("El usuario ya existe");
+            return ResponseEntity.ok("el usuario ya existe");
         }if(iUserService.existsByEmail(userSignUp.getEmail())){
-            return ResponseEntity.ok("El email ya se encunetra en uso");
+            return ResponseEntity.ok("el email ya esta registrado");
         }
         User user = new User(userSignUp.getUserName(), userSignUp.getEmail(), passwordEncoder.encode(userSignUp.getPassword()));
         Role role = new Role();

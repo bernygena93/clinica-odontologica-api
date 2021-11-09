@@ -5,6 +5,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.Calendar;
 import java.util.Date;
 
 @Entity
@@ -29,25 +32,29 @@ public class Turn {
     @JoinColumn(name = "dentist_id", referencedColumnName = "id")
     private Dentist dentist;
     @Column
-    private Date fechaTurno;
+    private LocalDate dateTurn;
+    @Column
+    private LocalTime timeTurn;
 
     public Turn(){
     }
 
-    public Turn(String dniPatient, Integer enrollmentDentist, Patient patient, Dentist dentist, Date fechaTurno) {
-        this.dniPatient = dniPatient;
-        this.enrollmentDentist = enrollmentDentist;
-        this.patient = patient;
-        this.dentist = dentist;
-        this.fechaTurno = fechaTurno;
-    }
-
-    public Turn(Long id, String dniPatient, Integer enrollmentDentist, Patient patient, Dentist dentist, Date fechaTurno) {
+    public Turn(Long id, String dniPatient, Integer enrollmentDentist, Patient patient, Dentist dentist, LocalDate dateTurn, LocalTime timeTurn) {
         this.id = id;
         this.dniPatient = dniPatient;
         this.enrollmentDentist = enrollmentDentist;
         this.patient = patient;
         this.dentist = dentist;
-        this.fechaTurno = fechaTurno;
+        this.dateTurn = dateTurn;
+        this.timeTurn = timeTurn;
+    }
+
+    public Turn(String dniPatient, Integer enrollmentDentist, Patient patient, Dentist dentist, LocalDate dateTurn, LocalTime timeTurn) {
+        this.dniPatient = dniPatient;
+        this.enrollmentDentist = enrollmentDentist;
+        this.patient = patient;
+        this.dentist = dentist;
+        this.dateTurn = dateTurn;
+        this.timeTurn = timeTurn;
     }
 }

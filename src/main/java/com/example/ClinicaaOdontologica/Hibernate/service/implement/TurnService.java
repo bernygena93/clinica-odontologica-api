@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
 
@@ -40,13 +41,8 @@ public class TurnService implements ITurnService {
     }
 
     @Override
-    public Turn getByDni(String dni) {
-        return turnRepository.getByDni(dni);
-    }
-
-    @Override
-    public Turn getByEnrollment(Integer enrollment) {
-        return turnRepository.getByEnrollment(enrollment);
+    public Collection<Turn> getByNextWeekTurn() {
+        return turnRepository.getByNextWeekTurn();
     }
 
     @Override

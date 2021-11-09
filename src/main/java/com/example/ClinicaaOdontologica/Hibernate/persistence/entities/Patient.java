@@ -6,6 +6,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.Date;
 
 
@@ -30,28 +32,34 @@ public class Patient{
     @OneToOne(mappedBy = "patient", fetch = FetchType.LAZY)
     private Turn turn;
     @Column
-    private Date fecha_ingreso;
+    private LocalDate dateAdmission;
 
     public Patient() {
     }
 
-    public Patient(Long id, String name, String surname, String dni, Address address, Turn turn, Date fecha_ingreso) {
+    public Patient(Long id, String name, String surname, String dni, Address address, Turn turn, LocalDate dateAdmission) {
         this.id = id;
         this.name = name;
         this.surname = surname;
         this.dni = dni;
         this.address = address;
         this.turn = turn;
-        this.fecha_ingreso = fecha_ingreso;
+        this.dateAdmission = dateAdmission;
     }
 
-    public Patient(String name, String surname, String dni, Address address, Turn turn, Date fecha_ingreso) {
+    public Patient(String name, String surname, String dni, Address address, Turn turn, LocalDate dateAdmission) {
         this.name = name;
         this.surname = surname;
         this.dni = dni;
         this.address = address;
         this.turn = turn;
-        this.fecha_ingreso = fecha_ingreso;
+        this.dateAdmission = dateAdmission ;
     }
 
+    public Patient(String name, String surname, String dni, Address address) {
+        this.name = name;
+        this.surname = surname;
+        this.dni = dni;
+        this.address = address;
+    }
 }

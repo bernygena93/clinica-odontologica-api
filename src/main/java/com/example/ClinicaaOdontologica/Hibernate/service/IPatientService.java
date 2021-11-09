@@ -1,5 +1,6 @@
 package com.example.ClinicaaOdontologica.Hibernate.service;
 
+import com.example.ClinicaaOdontologica.Hibernate.dto.PatientDto;
 import com.example.ClinicaaOdontologica.Hibernate.persistence.entities.Patient;
 
 import java.util.Collection;

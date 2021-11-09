@@ -1,6 +1,9 @@
 package com.example.ClinicaaOdontologica.Hibernate.controller;
 
+import com.example.ClinicaaOdontologica.Hibernate.dto.DentistDto;
+import com.example.ClinicaaOdontologica.Hibernate.dto.PatientDto;
 import com.example.ClinicaaOdontologica.Hibernate.persistence.entities.Dentist;
+import com.example.ClinicaaOdontologica.Hibernate.persistence.entities.Patient;
 import com.example.ClinicaaOdontologica.Hibernate.service.IDentistService;
 import com.example.ClinicaaOdontologica.Hibernate.service.ITurnService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +50,16 @@ public class DentistController {
     @GetMapping(path = "")
     public Collection<Dentist> searchAll(){
         return dentistService.getAll();
+    }
+
+    @GetMapping(path = "/dentistenrollment")
+    public Collection<DentistDto> searchAllDentistDto(){
+    Collection<Dentist> dentistCollection = dentistService.getAll();
+    Collection<DentistDto> dentistDtoCollection = new HashSet<DentistDto>();
+        for (Dentist dentist: dentistCollection) {
+            dentistDtoCollection.add(new DentistDto(dentist.getEnrollment()));
+        }
+        return dentistDtoCollection;
     }
 
     @PreAuthorize("hasRole('ADMIN')")

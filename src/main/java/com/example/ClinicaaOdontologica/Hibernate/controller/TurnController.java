@@ -35,7 +35,7 @@ public class TurnController {
     @PostMapping(path = "")
     public ResponseEntity<?> save(@RequestBody Turn turn){
         Patient patient = patientService.findByDni(turn.getDniPatient());
-        Dentist dentist = dentistService.getByEnrollment(turn.getEnrollmentDentist());
+        Dentist dentist = dentistService.findByEnrollment(turn.getEnrollmentDentist());
         turn.setDentist(dentist);
         turn.setPatient(patient);
         turnService.save(turn);
@@ -60,6 +60,11 @@ public class TurnController {
         return turnService.getAll();
     }
 
+    @GetMapping(path="/nextweekturn")
+    public Collection<Turn> getByNextWeekTurn(){
+        return turnService.getByNextWeekTurn();
+    }
+
     @PutMapping(path = "")
     public ResponseEntity<?> update(@RequestBody Turn turn) {
         Collection<Patient> patientList = patientService.getAll();
@@ -71,5 +76,7 @@ public class TurnController {
         turnService.update(turn);
         return ResponseEntity.ok(HttpStatus.OK);
     }
+
+
 
 }

@@ -46,6 +46,11 @@ public class Dentist {
         this.turns = turns;
     }
 
+    public Dentist(String name, String surname, Integer enrollment) {
+        this.name = name;
+        this.surname = surname;
+        this.enrollment = enrollment;
+    }
 }
 
 

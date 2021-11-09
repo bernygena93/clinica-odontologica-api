@@ -1,10 +1,14 @@
 package com.example.ClinicaaOdontologica.Hibernate.controller;
 
+import com.example.ClinicaaOdontologica.Hibernate.dto.PatientDto;
 import com.example.ClinicaaOdontologica.Hibernate.persistence.entities.*;
 import com.example.ClinicaaOdontologica.Hibernate.service.IAddressService;
 import com.example.ClinicaaOdontologica.Hibernate.service.IPatientService;
 
+import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.HashSet;
 
 import com.example.ClinicaaOdontologica.Hibernate.service.ITurnService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +34,7 @@ public class PatientController {
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(path = "")
     public ResponseEntity<?> save(@RequestBody Patient patient){
+        patient.setDateAdmission(LocalDate.now());
         patientService.save(patient);
         return ResponseEntity.ok(HttpStatus.OK);
     }
@@ -54,6 +59,16 @@ public class PatientController {
             }
         }
         return patientService.getAll();
+    }
+
+    @GetMapping(path = "/patientdni")
+    public Collection<PatientDto> searchAllPatientDto(){
+        Collection<Patient> patientCollection = patientService.getAll();
+        Collection<PatientDto> patientDtoCollection = new HashSet<PatientDto>();
+        for (Patient patient: patientCollection) {
+            patientDtoCollection.add(new PatientDto(patient.getDni()));
+        }
+        return patientDtoCollection;
     }
 
     @PreAuthorize("hasRole('ADMIN')")

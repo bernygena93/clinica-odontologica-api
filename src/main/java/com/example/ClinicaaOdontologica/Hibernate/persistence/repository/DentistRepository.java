@@ -9,4 +9,5 @@ import org.springframework.stereotype.Repository;
 public interface DentistRepository extends JpaRepository<Dentist, Long> {
     @Query("select d from Dentist d where d.enrollment = ?1")
     public Dentist getByEnrollment(Integer enrollment);
+
 }
